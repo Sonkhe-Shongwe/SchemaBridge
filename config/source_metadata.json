@@ -1,0 +1,203 @@
+{
+  "schema_version": "1.0",
+  "synthetic_only": true,
+  "description": "Source-authored field facts, not an inference answer key. There are no target_field or expected_decision attributes.",
+  "systems": {
+    "system_a": {
+      "display_name": "ServiceDesk Alpha",
+      "csv": "data/synthetic/source_a.csv",
+      "record_namespace": "alpha_ticket",
+      "columns": {
+        "Incident_ID": {
+          "description": "Local incident reference allocated by ServiceDesk Alpha; may contain leading zeros",
+          "declared_type": "string",
+          "entity_kind": "incident_identifier",
+          "nullable": false
+        },
+        "Region": {
+          "description": "South African province whose support team owns the incident",
+          "declared_type": "string",
+          "entity_kind": "service_region",
+          "nullable": false,
+          "declared_values": [
+            "Gauteng",
+            "Mpumalanga",
+            "Free State",
+            "Limpopo",
+            "KwaZulu-Natal"
+          ]
+        },
+        "Incident_Status": {
+          "description": "Lifecycle state of the service incident in Alpha's workflow",
+          "declared_type": "enum",
+          "entity_kind": "incident_lifecycle",
+          "nullable": false,
+          "declared_values": [
+            "Open",
+            "Pending",
+            "Closed"
+          ]
+        },
+        "Resolution_Minutes": {
+          "description": "Elapsed incident closure duration as recorded in minutes",
+          "declared_type": "number",
+          "entity_kind": "incident_duration",
+          "nullable": true,
+          "unit": "minute"
+        },
+        "Reported_At": {
+          "description": "Timestamp when the incident was initially opened",
+          "declared_type": "datetime",
+          "entity_kind": "incident_opened_timestamp",
+          "nullable": false,
+          "timezone": "Africa/Johannesburg"
+        },
+        "Team": {
+          "description": "Team assigned to troubleshoot this incident",
+          "declared_type": "string",
+          "entity_kind": "assignment_group",
+          "nullable": true
+        },
+        "Customer_ID": {
+          "description": "Reference of the organisation that logged the request, not the incident ticket",
+          "declared_type": "string",
+          "entity_kind": "customer_identifier",
+          "nullable": false
+        }
+      }
+    },
+    "system_b": {
+      "display_name": "SupportTrack Beta",
+      "csv": "data/synthetic/source_b.csv",
+      "record_namespace": "beta_ticket",
+      "columns": {
+        "Ticket_No": {
+          "description": "Incident ticket number unique only inside SupportTrack Beta; keep it as text",
+          "declared_type": "string",
+          "entity_kind": "incident_identifier",
+          "nullable": false
+        },
+        "Service_Area": {
+          "description": "Province code designating the service territory for this ticket",
+          "declared_type": "string",
+          "entity_kind": "service_region",
+          "nullable": false,
+          "declared_values": [
+            "GP",
+            "MP",
+            "FS",
+            "LP",
+            "KZN"
+          ]
+        },
+        "Ticket_State": {
+          "description": "State in SupportTrack ticket workflow (new, resolved, or awaiting action)",
+          "declared_type": "enum",
+          "entity_kind": "incident_lifecycle",
+          "nullable": false,
+          "declared_values": [
+            "New",
+            "Awaiting",
+            "Resolved"
+          ]
+        },
+        "Fix_Hours": {
+          "description": "Elapsed time from ticket creation to resolution, measured in hours",
+          "declared_type": "number",
+          "entity_kind": "incident_duration",
+          "nullable": true,
+          "unit": "hour"
+        },
+        "Opened": {
+          "description": "Creation date and time for this ticket",
+          "declared_type": "datetime",
+          "entity_kind": "incident_opened_timestamp",
+          "nullable": false,
+          "timezone": "Africa/Johannesburg"
+        },
+        "Service_Team": {
+          "description": "Support group responsible for the ticket",
+          "declared_type": "string",
+          "entity_kind": "assignment_group",
+          "nullable": true
+        },
+        "Customer_Ref": {
+          "description": "Identifier for a client organisation in Beta's customer namespace",
+          "declared_type": "string",
+          "entity_kind": "customer_identifier",
+          "nullable": false
+        }
+      }
+    },
+    "system_c": {
+      "display_name": "IncidentCloud Gamma",
+      "csv": "data/synthetic/source_c.csv",
+      "record_namespace": "gamma_case",
+      "columns": {
+        "Case_Ref": {
+          "description": "Case reference assigned to a reported service interruption, within Gamma",
+          "declared_type": "string",
+          "entity_kind": "incident_identifier",
+          "nullable": false
+        },
+        "Province_Name": {
+          "description": "South African service province used for incident reporting",
+          "declared_type": "string",
+          "entity_kind": "service_region",
+          "nullable": false,
+          "declared_values": [
+            "Gauteng",
+            "Mpumalanga",
+            "Free State",
+            "Limpopo",
+            "KwaZulu-Natal"
+          ]
+        },
+        "Case_Status": {
+          "description": "Incident case progression state (active, on hold, completed)",
+          "declared_type": "enum",
+          "entity_kind": "incident_lifecycle",
+          "nullable": false,
+          "declared_values": [
+            "Active",
+            "OnHold",
+            "Completed"
+          ]
+        },
+        "Time_To_Close": {
+          "description": "Elapsed incident handling time until resolution, recorded as minutes",
+          "declared_type": "number",
+          "entity_kind": "incident_duration",
+          "nullable": true,
+          "unit": "minute"
+        },
+        "Opened_At": {
+          "description": "Date and time the case was first recorded",
+          "declared_type": "datetime",
+          "entity_kind": "incident_opened_timestamp",
+          "nullable": false,
+          "timezone": "Africa/Johannesburg"
+        },
+        "Customer_ID": {
+          "description": "Account identifier of the client that owns the installation",
+          "declared_type": "string",
+          "entity_kind": "customer_identifier",
+          "nullable": false
+        },
+        "Location": {
+          "description": "Specific building or service site code, not the broader reporting province",
+          "declared_type": "string",
+          "entity_kind": "service_site",
+          "nullable": false
+        },
+        "Area_SqM": {
+          "description": "Physical floor area of service facility in square metres",
+          "declared_type": "number",
+          "entity_kind": "physical_area",
+          "nullable": true,
+          "unit": "square_metre"
+        }
+      }
+    }
+  }
+}

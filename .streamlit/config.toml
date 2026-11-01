@@ -1,0 +1,29 @@
+# Local-only, synthetic-demo GUI foundation.
+# Launch from the repository root for this config to be discovered.
+# No secrets, uploads, or network model inference are configured here.
+[server]
+address = "127.0.0.1"
+port = 8501
+headless = false
+
+[browser]
+gatherUsageStats = false
+
+# Prevent Streamlit's automatic per-table CSV download and copy.
+# Explicit P031 audited output buttons are a separate, guarded action.
+[client]
+disableDataExport = true
+
+# UX2-04 light native theme. These seven keys were independently exercised in
+# the owner Windows UX2-02 synthetic probe on Streamlit 1.66.1 (docs/64).
+# Keep server loopback and client.disableDataExport unchanged above.
+[theme]
+base = "light"
+primaryColor = "#2059CB"
+backgroundColor = "#F5F8FC"
+textColor = "#182941"
+dataframeHeaderBackgroundColor = "#EFF5FC"
+showWidgetBorder = true
+
+[theme.sidebar]
+backgroundColor = "#FFFFFF"

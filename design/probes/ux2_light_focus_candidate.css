@@ -1,0 +1,27 @@
+/*
+ * SchemaBridge native light workbench keyboard focus surface.
+ *
+ * Owner Windows UX2-02 tested the original semantic control outline at
+ * five sizes. UX2-04 loads this stylesheet via supported st.html in the
+ * actual four-page router. UX2-10 additionally identifies keyboard-focused
+ * heading/nav links: the default native anchor outline was computed as
+ * 'none' in isolated Chromium, so visible links now receive the same solid
+ * 3px ring. This is a scoped UX focus improvement, not WCAG certification.
+ *
+ * No DOM mutation, transient Emotion class selectors, model or export change.
+ * Native sidebar close/reopen focus and full real 200%-Chrome zoom remain
+ * separate acceptance gates. Keep semantics and contrast audited in UX2-10.
+ */
+a:focus-visible,
+summary:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+[role="combobox"]:focus-visible,
+[role="checkbox"]:focus-visible,
+[role="radio"]:focus-visible,
+[role="grid"]:focus-visible,
+[tabindex="0"]:focus-visible {
+  outline: 3px solid #1554B5 !important;
+  outline-offset: 3px !important;
+}

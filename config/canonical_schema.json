@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "project": "SchemaBridge",
+  "synthetic_only": true,
+  "description": "Four business targets are inferred; technical provenance fields are populated by ingestion, never matched semantically",
+  "business_fields": {
+    "incident_id": {
+      "type": "string",
+      "required": true,
+      "nullable": false,
+      "entity_kind": "incident_identifier",
+      "description": "Identifier of the service incident within its originating system; not a global identity key",
+      "preserve_leading_zeroes": true
+    },
+    "region": {
+      "type": "string",
+      "required": true,
+      "nullable": false,
+      "entity_kind": "service_region",
+      "description": "Geographic province or service coverage region used for incident reporting",
+      "allowed_values": [
+        "Gauteng",
+        "Mpumalanga",
+        "Free State",
+        "Limpopo",
+        "KwaZulu-Natal"
+      ]
+    },
+    "incident_status": {
+      "type": "enum",
+      "required": true,
+      "nullable": false,
+      "entity_kind": "incident_lifecycle",
+      "description": "Documented incident lifecycle state, not ticket priority or customer state",
+      "allowed_values": [
+        "Open",
+        "Pending",
+        "Closed"
+      ]
+    },
+    "resolution_minutes": {
+      "type": "number",
+      "required": false,
+      "nullable": true,
+      "entity_kind": "incident_duration",
+      "unit": "minute",
+      "min_value": 0,
+      "description": "Elapsed incident resolution duration in minutes; missing can be legitimate for unresolved incidents"
+    }
+  },
+  "technical_fields": {
+    "source_system": {
+      "type": "string",
+      "required": true,
+      "generated_by": "ingestion",
+      "description": "Original source namespace"
+    },
+    "source_record_id": {
+      "type": "string",
+      "required": true,
+      "generated_by": "ingestion",
+      "description": "Source filename and one-based CSV data-row index (positional identity), not a shared incident identifier"
+    }
+  },
+  "row_policy": {
+    "required_field_missing": "quarantine",
+    "required_field_invalid": "quarantine",
+    "unknown_mandatory_status": "hold_for_review",
+    "optional_duration_missing": "allow_null_and_record_reason",
+    "invalid_duration": "quarantine_or_hold_with_explicit_error",
+    "duplicate_source_identifier": "flag_without_automatic_deletion",
+    "cross_system_identity": "never_join",
+    "no_silent_type_coercion": true
+  }
+}

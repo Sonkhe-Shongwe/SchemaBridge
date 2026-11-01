@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0",
+  "synthetic_only": true,
+  "governance": "Explicit demo-approved categorical dictionaries; apply only after safe source-to-canonical field mapping. Unknown categories go to review/quarantine, never inferred by embeddings.",
+  "regions": {
+    "system_a": {
+      "Gauteng": "Gauteng",
+      "Mpumalanga": "Mpumalanga",
+      "Free State": "Free State",
+      "Limpopo": "Limpopo",
+      "KwaZulu-Natal": "KwaZulu-Natal"
+    },
+    "system_b": {
+      "GP": "Gauteng",
+      "MP": "Mpumalanga",
+      "FS": "Free State",
+      "LP": "Limpopo",
+      "KZN": "KwaZulu-Natal"
+    },
+    "system_c": {
+      "Gauteng": "Gauteng",
+      "Mpumalanga": "Mpumalanga",
+      "Free State": "Free State",
+      "Limpopo": "Limpopo",
+      "KwaZulu-Natal": "KwaZulu-Natal"
+    }
+  },
+  "statuses": {
+    "system_a": {
+      "Open": "Open",
+      "Pending": "Pending",
+      "Closed": "Closed"
+    },
+    "system_b": {
+      "New": "Open",
+      "Awaiting": "Pending",
+      "Resolved": "Closed"
+    },
+    "system_c": {
+      "Active": "Open",
+      "OnHold": "Pending",
+      "Completed": "Closed"
+    }
+  },
+  "duration_units": {
+    "minute": {
+      "dimension": "duration",
+      "multiplier_to_minutes": 1
+    },
+    "hour": {
+      "dimension": "duration",
+      "multiplier_to_minutes": 60
+    }
+  },
+  "rationale": {
+    "status": "Demo domain policy defines each source system's own statuses; Active in another real system may not mean Open",
+    "unit": "Only explicitly declared hour and minute durations are approved",
+    "region": "Beta region codes are demo-provided province abbreviations; no inferred geocoding"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "config_version": "1.0",
+  "project_name": "SchemaBridge synthetic incident demo",
+  "synthetic_only": true,
+  "canonical_schema": "config/canonical_schema.json",
+  "source_metadata": "config/source_metadata.json",
+  "value_rules": "config/value_rules.json",
+  "sources": [
+    "data/synthetic/source_a.csv",
+    "data/synthetic/source_b.csv",
+    "data/synthetic/source_c.csv"
+  ],
+  "matcher": {
+    "lexical": "rapidfuzz",
+    "semantic": "sentence-transformers/all-MiniLM-L6-v2",
+    "top_k": 4,
+    "thresholds": "tune_on_development_labels_only_in_P5",
+    "device": "cpu",
+    "semantic_score_interpretation": "cosine_similarity_not_calibrated_probability"
+  },
+  "processing": {
+    "append_with_provenance": true,
+    "join_across_sources": false,
+    "preserve_id_strings": true,
+    "require_compatible_types_units_and_business_meaning": true,
+    "unverified_mapping": "review"
+  },
+  "fixture": {
+    "generator": "scripts/generate_synthetic.py",
+    "seed": 20261027,
+    "records_per_source": 60,
+    "record_count_total": 180
+  }
+}

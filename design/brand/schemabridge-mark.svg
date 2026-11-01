@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+<title id="title">SchemaBridge mark</title><desc id="desc">Two interlocking bridge paths connect three data nodes</desc>
+<path d="M8 42 C16 24 25 17 34 32" fill="none" stroke="#2159C8" stroke-width="7" stroke-linecap="round"/>
+<path d="M25 41 C35 17 44 21 56 40" fill="none" stroke="#11A9B5" stroke-width="7" stroke-linecap="round"/>
+<circle cx="8" cy="42" r="4" fill="#173B77"/><circle cx="34" cy="32" r="4" fill="#2159C8"/><circle cx="56" cy="40" r="4" fill="#087F8C"/>
+</svg>
