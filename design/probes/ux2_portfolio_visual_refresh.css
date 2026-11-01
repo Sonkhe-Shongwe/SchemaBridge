@@ -1,0 +1,303 @@
+/*
+ * SchemaBridge portfolio visual refresh. Presentation-only, versioned CSS.
+ * Keeps native Streamlit controls, their accessibility roles, keyboard focus
+ * stylesheet, and all existing page data/test labels untouched.
+ *
+ * No external fonts, images, scripts, Emotion hashed classes or DOM mutation.
+ * Uses stable Streamlit data-testid hooks with graceful native fallbacks.
+ * UX2-12 was approved against an earlier visual baseline; this is CANDIDATE
+ * styling only until an actual owner Chrome review and targeted checks.
+ */
+:root {
+  --sb-ink: #152B47;
+  --sb-muted: #566A83;
+  --sb-border: #DCE5EF;
+  --sb-paper: #FFFFFF;
+  --sb-canvas: #F2F6FB;
+  --sb-navy: #10243E;
+  --sb-navy-soft: #193553;
+  --sb-teal: #087F82;
+  --sb-blue: #2059CB;
+}
+[data-testid="stAppViewContainer"] {
+  background-color: var(--sb-canvas);
+  color: var(--sb-ink);
+  font-family: "Segoe UI", "Inter", Arial, sans-serif;
+}
+/* The existing four-page native router remains the only navigation. */
+[data-testid="stSidebar"] {
+  background: linear-gradient(180deg, #10243E 0%, #152D49 100%);
+  border-right: 1px solid #254362;
+}
+[data-testid="stSidebar"] h3 {
+  color: #F8FBFF;
+  font-size: 1.3rem;
+  letter-spacing: -0.025em;
+  margin-top: 0.4rem;
+  margin-bottom: 0.12rem;
+  font-weight: 720;
+}
+[data-testid="stSidebar"] p,
+[data-testid="stSidebar"] [data-testid="stCaptionContainer"] {
+  color: #D1DFEE;
+}
+[data-testid="stSidebar"] [data-testid="stSidebarNav"] a {
+  border-radius: 10px;
+  margin-bottom: 0.25rem;
+  transition: background-color 110ms ease, color 110ms ease;
+}
+[data-testid="stSidebar"] [data-testid="stSidebarNav"] a:hover {
+  background-color: #254B6F;
+}
+/* On dark navigation, the original blue main focus outline would be weak. */
+[data-testid="stSidebar"] a:focus-visible,
+[data-testid="stSidebar"] button:focus-visible,
+[data-testid="stSidebar"] [tabindex="0"]:focus-visible {
+  outline-color: #65D5D1 !important;
+}
+[data-testid="stSidebar"] [data-testid="stSidebarNav"] a[aria-current="page"],
+[data-testid="stSidebar"] [data-testid="stSidebarNav"] a[aria-selected="true"] {
+  background-color: #254F71;
+  color: #FFFFFF;
+  font-weight: 650;
+}
+[data-testid="stSidebar"] [data-testid="stAlert"] {
+  background: #203D5D;
+  color: #EAF5FF;
+  border: 1px solid #446589;
+  border-left: 3px solid #57D0CC;
+  border-radius: 12px;
+  box-shadow: none;
+}
+/* Restrained editorial page typography, without hiding semantic headings. */
+[data-testid="stMainBlockContainer"] {
+  max-width: 1240px;
+  padding-top: 1.6rem;
+  padding-bottom: 4.5rem;
+}
+[data-testid="stMainBlockContainer"] h1 {
+  color: #122B49;
+  font-size: clamp(2.05rem, 3vw, 2.6rem);
+  font-weight: 760;
+  line-height: 1.14;
+  letter-spacing: -0.042em;
+  margin-bottom: 0.15rem;
+}
+[data-testid="stMainBlockContainer"] h2 {
+  color: #16324F;
+  font-size: clamp(1.25rem, 2.1vw, 1.55rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin-top: 0.3rem;
+}
+[data-testid="stMainBlockContainer"] h3 {
+  color: #1B3B5B;
+  letter-spacing: -0.014em;
+}
+[data-testid="stMainBlockContainer"] [data-testid="stCaptionContainer"] {
+  color: var(--sb-muted);
+  line-height: 1.46;
+}
+/* Cards are visibly grouped, but retain live backend data and native metrics. */
+[data-testid="stMainBlockContainer"] [data-testid="stMetric"] {
+  background-color: var(--sb-paper);
+  border: 1px solid var(--sb-border);
+  border-top: 3px solid #138C96;
+  border-radius: 14px;
+  padding: 0.9rem 1rem 0.95rem;
+  box-shadow: 0 6px 22px rgba(17, 42, 74, 0.035);
+  min-height: 118px;
+}
+[data-testid="stMainBlockContainer"] [data-testid="stMetricLabel"] {
+  color: var(--sb-muted);
+  font-weight: 600;
+}
+[data-testid="stMainBlockContainer"] [data-testid="stMetricValue"] {
+  color: #112B46;
+  font-weight: 750;
+  letter-spacing: -0.045em;
+}
+[data-testid="stMainBlockContainer"] [data-testid="stVerticalBlockBorderWrapper"] {
+  border-radius: 14px;
+}
+/* Keep synthetic scope banners readable without overpowering real results. */
+[data-testid="stMainBlockContainer"] [data-testid="stAlert"] {
+  border-radius: 11px;
+  border-width: 1px;
+  box-shadow: none;
+}
+[data-testid="stMainBlockContainer"] [data-testid="stDataFrame"] {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--sb-border);
+}
+[data-testid="stMainBlockContainer"] [data-testid="stButton"] button[kind="primary"] {
+  border-radius: 10px;
+  font-weight: 650;
+  padding-left: 1.1rem;
+  padding-right: 1.1rem;
+  min-height: 2.7rem;
+  box-shadow: 0 4px 12px rgba(32, 89, 203, 0.13);
+}
+[data-testid="stMainBlockContainer"] [data-testid="stButton"] button[kind="primary"]:hover {
+  box-shadow: 0 6px 17px rgba(32, 89, 203, 0.20);
+}
+[data-testid="stMainBlockContainer"] [data-testid="stProgress"] {
+  accent-color: var(--sb-teal);
+}
+/* An explicit static HTML marker in the shared shell, not duplicate nav. */
+.sb-context {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  padding-bottom: 0.15rem;
+  color: #52718E;
+  font: 700 0.71rem/1.4 "Segoe UI", Arial, sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.sb-context::before {
+  content: "";
+  width: 17px;
+  height: 3px;
+  flex: 0 0 auto;
+  border-radius: 2px;
+  background: #0B8990;
+}
+.sb-context__divider {
+  color: #9CAEC0;
+}
+@media (max-width: 800px) {
+  [data-testid="stMainBlockContainer"] {
+    padding-top: 1.15rem;
+    padding-bottom: 2.5rem;
+  }
+  [data-testid="stMainBlockContainer"] h1 {
+    font-size: 2rem;
+  }
+  [data-testid="stMainBlockContainer"] [data-testid="stMetric"] {
+    min-height: 106px;
+    padding: 0.75rem 0.8rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-testid="stSidebar"] [data-testid="stSidebarNav"] a {
+    transition: none;
+  }
+}
+
+/* Concise, source-backed breakdown above the full native audit tables. */
+.sb-outcome-card {
+  background: #FFFFFF;
+  border: 1px solid #DCE5EF;
+  border-radius: 14px;
+  padding: 1rem 1.1rem 0.95rem;
+  box-shadow: 0 6px 22px rgba(17, 42, 74, 0.035);
+}
+.sb-outcome-heading {
+  color: #56728C;
+  font-size: 0.72rem;
+  letter-spacing: 0.095em;
+  font-weight: 750;
+  margin-bottom: 0.7rem;
+}
+.sb-outcome-track {
+  display: flex;
+  height: 15px;
+  border-radius: 99px;
+  overflow: hidden;
+  background: #DDE6EF;
+  width: 100%;
+}
+.sb-outcome-track span { display: block; height: 100%; }
+.sb-outcome-legend {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 1.1rem;
+  row-gap: 0.55rem;
+  margin-top: 0.85rem;
+}
+.sb-outcome-legend-item {
+  display: inline-flex;
+  align-items: center;
+  column-gap: 0.4rem;
+  font-size: 0.78rem;
+  color: #526780;
+}
+.sb-outcome-legend-item strong {
+  color: #17324E;
+  font-weight: 750;
+}
+.sb-outcome-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Native st.logo handles top branding; no duplicate sidebar logo block. */
+[data-testid="stSidebarHeader"] {
+  background-color: transparent;
+  padding-top: 1rem;
+  padding-bottom: 0.65rem;
+}
+[data-testid="stSidebarHeader"] [data-testid="stLogo"] {
+  max-width: min(100%, 250px);
+}
+[data-testid="stSidebarNav"] {
+  padding-top: 0.25rem;
+}
+[data-testid="stSidebarNav"] [data-testid="stSidebarNavSeparator"] {
+  opacity: 0.28;
+}
+[data-testid="stSidebarNav"] span,
+[data-testid="stSidebarNav"] a {
+  color: #E5EFFA;
+}
+[data-testid="stSidebarNav"] [aria-current="page"] span,
+[data-testid="stSidebarNav"] [aria-selected="true"] span {
+  color: #FFFFFF;
+}
+[data-testid="stSidebar"] [data-testid="stSidebarContent"] hr {
+  border-color: #48627B;
+}
+/* Direct comparison of actual current raw scores, never model confidence. */
+.sb-method-compare {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+  margin: 0.45rem 0 0.75rem;
+}
+.sb-method-card {
+  border: 1px solid #DCE5EF;
+  border-radius: 13px;
+  background: #FFFFFF;
+  padding: 1rem 1.1rem;
+  border-top: 3px solid #2477B9;
+  min-width: 0;
+}
+.sb-method-card--semantic {
+  border-top-color: #099B9D;
+}
+.sb-method-label {
+  font-size: 0.73rem;
+  font-weight: 730;
+  letter-spacing: 0.065em;
+  color: #576E85;
+}
+.sb-method-target {
+  overflow-wrap: anywhere;
+  margin: 0.5rem 0;
+  color: #16314D;
+  font-size: 1.32rem;
+  font-weight: 740;
+  letter-spacing: -0.025em;
+}
+.sb-method-foot {
+  color: #526B85;
+  font-size: 0.78rem;
+}
+@media (max-width: 650px) {
+  .sb-method-compare { grid-template-columns: minmax(0, 1fr); }
+}

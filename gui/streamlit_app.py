@@ -23,13 +23,22 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+# Native Streamlit branding appears above the four sidebar navigation links.
+# Keep the square original mark for the collapsed sidebar. Both assets are local.
+BRAND = Path(__file__).resolve().parents[1] / "design" / "brand"
+st.logo(
+    str(BRAND / "schemabridge-wordmark.svg"),
+    size="large",
+    icon_image=str(BRAND / "schemabridge-mark.svg"),
+)
+
 page = st.navigation(
-    [
+    {"WORKSPACE": [
         st.Page(PAGES / "sources.py", title="01  Data Sources", icon=":material/database:", default=True),
         st.Page(PAGES / "matching.py", title="02  AI Mapping", icon=":material/account_tree:"),
         st.Page(PAGES / "validation.py", title="03  Validation", icon=":material/verified_user:"),
         st.Page(PAGES / "results.py", title="04  Results & Export", icon=":material/file_download:"),
-    ],
+    ]},
     position="sidebar",
 )
 

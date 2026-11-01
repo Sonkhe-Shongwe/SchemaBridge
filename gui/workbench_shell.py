@@ -158,17 +158,31 @@ def render_shell(state: Mapping[str, object]) -> None:
     )
     # Supported static CSS path, no DOM replacement or browser scripting.
     st.html("<style>\n" + stylesheet.read_text(encoding="utf-8") + "\n</style>")
+    visual_stylesheet = (
+        Path(__file__).resolve().parents[1]
+        / "design/probes/ux2_portfolio_visual_refresh.css"
+    )
+    st.html(
+        "<style>\n" + visual_stylesheet.read_text(encoding="utf-8") + "\n</style>"
+    )
 
-    logo = Path(__file__).resolve().parents[1] / "design/brand/schemabridge-mark.svg"
-    st.sidebar.image(str(logo), width=48)
-    st.sidebar.markdown("### SchemaBridge")
-    st.sidebar.caption("LOCAL · OFFLINE · SYNTHETIC ONLY")
+    # Native st.logo() is rendered above st.navigation() by the entrypoint.
+    # Keep the lower sidebar for environment and accurate session-state context.
+    st.sidebar.divider()
+    st.sidebar.caption("ENVIRONMENT · LOCAL / OFFLINE / SYNTHETIC ONLY")
     stage = session_stage(state)
     st.sidebar.info("Session stage: **" + stage.label + "**")
     st.sidebar.caption(stage.explanation)
     st.sidebar.caption("Four stages · review each report in its page")
 
-    st.caption(
-        "SCHEMABRIDGE  /  LOCAL SYNTHETIC DEMO  /  "
-        "INDEPENDENT VALIDATION  /  GUARDED EXPORT"
+    # Presentation-only context: deliberately not a navigation/approval claim.
+    st.html(
+        '<div class="sb-context" role="note" '
+        'aria-label="Local synthetic SchemaBridge workbench">'
+        '<span>SchemaBridge</span>'
+        '<span class="sb-context__divider">/</span>'
+        '<span>Local synthetic workbench</span>'
+        '<span class="sb-context__divider">/</span>'
+        '<span>Independent validation</span>'
+        '</div>'
     )

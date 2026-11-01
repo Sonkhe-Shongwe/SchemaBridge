@@ -144,6 +144,45 @@ st.caption(
     f"Reason-event entries: {summary['reason_events']} (not distinct records)."
 )
 
+# Visual grouping ONLY: these values come exclusively from the existing
+# independently checked reconciliation summary; no new disposition logic.
+# Keep the detailed native st.progress and source tables below for scrutiny.
+_disposition_palette = (
+    ("ACCEPTED", "Accepted", "#087F82"),
+    ("ACCEPTED_OPTIONAL_NULL", "Accepted (optional null)", "#62B8B6"),
+    ("HELD_FOR_REVIEW", "Held for review", "#C08C38"),
+    ("QUARANTINED", "Quarantined", "#BB5362"),
+)
+_total_records = summary["input_records"]
+if _total_records > 0:
+    _bar_parts = []
+    _legend_parts = []
+    for _code, _title, _color in _disposition_palette:
+        _count = int(summary["counts"][_code])
+        _percent = _count * 100 / _total_records
+        _bar_parts.append(
+            f'<span style="width:{_percent:.5f}%;background:{_color}" '
+            'aria-hidden="true"></span>'
+        )
+        _legend_parts.append(
+            f'<span class="sb-outcome-legend-item">'
+            f'<span class="sb-outcome-dot" style="background:{_color}"></span>'
+            f'<span>{_title}</span><strong>{_count}</strong></span>'
+        )
+    st.html(
+        '<div class="sb-outcome-card">'
+        '<div class="sb-outcome-heading">RECORD OUTCOMES · VALIDATED ACCOUNTING</div>'
+        '<div class="sb-outcome-track" role="img" '
+        'aria-label="Source record disposition: '
+        + ", ".join(
+            f"{title} {int(summary['counts'][code])}"
+            for code, title, _color in _disposition_palette
+        )
+        + '">' + "".join(_bar_parts) + '</div>'
+        '<div class="sb-outcome-legend">' + "".join(_legend_parts) + '</div>'
+        '</div>'
+    )
+
 st.subheader("Four-way record disposition")
 st.caption(
     "Each source record appears in exactly one of these four categories. "

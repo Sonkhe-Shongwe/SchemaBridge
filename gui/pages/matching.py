@@ -5,6 +5,7 @@ labels, no validation bypass, no arbitrary upload and no file export.
 """
 
 from pathlib import Path
+from html import escape
 import logging
 import sys
 
@@ -154,6 +155,26 @@ source_row = next(row for row in shown if row["source_column"] == chosen_column)
 raw_item = next(
     item for item in report["results"]
     if item["source_system"] == chosen_system and item["source_column"] == chosen_column
+)
+
+# Original ranker values only. This is a read-only visual comparison:
+# similarity numbers are never converted to confidence or approvals.
+_method_cards = []
+for _label, _candidate, _score, _class_name in (
+    ("RapidFuzz", source_row["lexical_top"], source_row["lexical_similarity"], "lexical"),
+    ("MiniLM", source_row["semantic_top"], source_row["semantic_similarity"], "semantic"),
+):
+    _method_cards.append(
+        '<div class="sb-method-card sb-method-card--' + _class_name + '">'
+        '<div class="sb-method-label">' + _label + ' · TOP SUGGESTION</div>'
+        '<div class="sb-method-target">' + escape(str(_candidate)) + '</div>'
+        '<div class="sb-method-foot">Raw similarity: '
+        + escape(str(_score)) + ' · NOT_EVALUATED</div></div>'
+    )
+st.html(
+    '<div class="sb-method-compare" role="group" '
+    'aria-label="Two independent proposal ranking methods">'
+    + "".join(_method_cards) + '</div>'
 )
 
 st.subheader("Selected source field")

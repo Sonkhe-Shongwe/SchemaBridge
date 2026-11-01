@@ -132,6 +132,41 @@ accepted, reviewed, rejected = st.columns(3)
 accepted.metric("ACCEPT by backend rules", outcome["counts"]["ACCEPT"])
 reviewed.metric("REVIEW / manual analysis needed", outcome["counts"]["REVIEW"])
 rejected.metric("REJECT / incompatible", outcome["counts"]["REJECT"])
+
+# Compact status composition mirrors only the already checked validator
+# counts. It is intentionally not a classifier, approval action or chart score.
+_status_palette = (
+    ("ACCEPT", "#087F82"),
+    ("REVIEW", "#C08C38"),
+    ("REJECT", "#BB5362"),
+)
+_status_total = len(outcome["decisions"])
+if _status_total:
+    _parts = []
+    _legend = []
+    for _status, _shade in _status_palette:
+        _amount = int(outcome["counts"][_status])
+        _parts.append(
+            f'<span style="width:{_amount * 100 / _status_total:.5f}%;'
+            f'background:{_shade}" aria-hidden="true"></span>'
+        )
+        _legend.append(
+            '<span class="sb-outcome-legend-item">'
+            f'<span class="sb-outcome-dot" style="background:{_shade}"></span>'
+            f'<span>{_status}</span><strong>{_amount}</strong></span>'
+        )
+    st.html(
+        '<div class="sb-outcome-card">'
+        '<div class="sb-outcome-heading">FIELD COMPATIBILITY · INDEPENDENT VALIDATOR</div>'
+        '<div class="sb-outcome-track" role="img" aria-label="'
+        + ", ".join(
+            f"{code}: {int(outcome['counts'][code])}"
+            for code, _shade in _status_palette
+        )
+        + '">' + "".join(_parts) + '</div>'
+        '<div class="sb-outcome-legend">' + "".join(_legend) + '</div>'
+        '</div>'
+    )
 st.caption(
     "All three totals come directly from the original Python validator. "
     "ACCEPT does not prove semantic mapping correctness; source-row disposition "
