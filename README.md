@@ -1,108 +1,160 @@
 # SchemaBridge
 
-**AI-assisted schema matching with explainable validation and auditable data reconciliation.**
+**Explainable schema matching and auditable data reconciliation**
 
-SchemaBridge is a local Python + Streamlit portfolio project that explores a real data engineering problem: different systems describe the same business concepts using different names, types, categorical values and time units. Matching labels alone can be misleading, and high embedding similarity is **not** proof that two fields are safe to combine.
+SchemaBridge is a Python and Streamlit application for reconciling incident data exported from systems with different field names, formats and business conventions. It combines lexical and semantic matching to suggest equivalent columns, applies independent compatibility rules, and produces standardised records with an audit trail of every exception.
 
-The application proposes matches with **RapidFuzz** and locally cached **MiniLM**, checks them using an **independent Python validator**, then conservatively standardises records while preserving source identity. The demo uses **three entirely fictional IT incident CSV sources**. It is not a production customer-data integration service.
+The current application works with three supplied synthetic IT service-management datasets. Its focus is safe schema reconciliation: a similar column name or embedding score is never enough to approve a mapping.
 
-## How it works
+**Stack:** Python 3.12 · Streamlit · pandas · RapidFuzz · Sentence Transformers (MiniLM) · NumPy · pytest
 
-```mermaid
-flowchart TD
-    A[Three fictional incident CSV sources] --> B[Read-only source profiles]
-    B --> C[RapidFuzz and cached MiniLM candidate ranking]
-    C --> D{Independent compatibility validator}
-    D -->|Accepted| E[Conservative record reconciliation]
-    D -->|Uncertain| F[Hold for review]
-    D -->|Unsafe| G[Reject]
-    E --> H[Read-only result inspection]
-    H --> I[Explicit SHA-256-checked write-once audit export]
-```
-
-The ranking models only **propose**. A separate compatibility gate checks declared business meaning, entity kind, type, units, approved categories, ambiguity and collisions. It does not silently auto-approve a reviewer-held match. The system preserves leading-zero identifiers and source provenance; it **does not join incident records across source systems**.
-
-The canonical business fields for this demonstration are `incident_id`, `region`, `incident_status` and `resolution_minutes`. Technical `source_system` and `source_record_id` columns are generated traceability, not AI-matched business fields.
-
-## Interface screenshots
-
-These are **genuine screenshots from the owner's local Windows/Chrome Streamlit demo**, using three fictional incident datasets and a locally cached MiniLM model. They are not product mockups, production data or evidence of a new public-clone CI run. The read-only capture did not prepare any audited output.
+## Application
 
 | Data Sources | AI Mapping |
 |---|---|
-| ![Data Sources: fictional inventory and metrics](assets/screenshots/data_sources.png) | ![AI Mapping: proposal workbench](assets/screenshots/ai_mapping.png) |
+| ![Source inventory, profiles and data preview](assets/screenshots/data_sources.png) | ![Lexical and semantic field-matching workbench](assets/screenshots/ai_mapping.png) |
 | Validation | Results & Export |
-| ![Validation: independent decisions and statuses](assets/screenshots/validation.png) | ![Results: four-category record accounting](assets/screenshots/results_and_export.png) |
+| ![Mapping decisions and compatibility reasons](assets/screenshots/validation.png) | ![Reconciliation outcomes and audited export](assets/screenshots/results_and_export.png) |
 
-The approved design places the existing SchemaBridge wordmark above four native navigation routes, with a dark navy sidebar and a light, data-focused workspace. The owner accepted this final four-page look after **22/22 focused Windows GUI tests** and complete real-browser capture on **1 November 2026**.
+The four-page workbench follows the data from its original structure to validated mappings and reconciled output:
 
-## The four-page workbench
+1. **Data Sources:** Inspect the three source files, field definitions, data types and profiles without changing the input.
+2. **AI Mapping:** Run RapidFuzz lexical matching and local MiniLM semantic ranking. Compare candidate mappings and their similarity scores.
+3. **Validation:** Review `ACCEPT`, `REVIEW` and `REJECT` decisions based on field meaning, type, units, category rules, ambiguity and conflicting targets.
+4. **Results & Export:** Inspect standardised records, held records and quarantined rows. Generate audit files through a separate, explicit export action.
 
-| Page | Purpose |
-|---|---|
-| **01 Data Sources** | Preview the original fictional exports, their profiles and declared metadata |
-| **02 AI Mapping** | Explicitly run offline lexical and semantic ranking; review candidates and raw similarities |
-| **03 Validation** | Explain ACCEPT, REVIEW and REJECT decisions from the original independent validator |
-| **04 Results & Export** | Inspect standardised, held and quarantined outcomes; separately prepare guarded four-file audited reports |
+## What it handles
 
-Reading pages or changing presentation filters never authorises model inference or output writes. Export files are generated only by an explicit original-backend action to a new ignored directory and verified against a session-bound manifest.
+- **Inconsistent schemas:** Ranks candidate matches between source columns and a canonical incident schema.
+- **Business-rule validation:** Uses declared entity types and meanings, category dictionaries, compatible units and collision checks before a mapping can be accepted.
+- **Value standardisation:** Normalises approved incident statuses and regions, and converts declared durations to minutes.
+- **Conservative exception handling:** Holds ambiguous records for review and quarantines invalid data rather than guessing or silently dropping rows.
+- **Traceability:** Preserves identifiers as text, including leading zeroes, and records `source_system` and `source_record_id` for each standardised record.
+- **Controlled exports:** Writes four audit files to a unique output directory, verifies the output contents and checks SHA-256 hashes before serving downloads.
 
-## Historical results on the approved synthetic demonstration
+The application appends compatible records from each source; it does **not** attempt to join incident identities across systems.
 
-| Observed property | Result |
-|---|---:|
-| Source records | **180** in three fictional exports |
-| Declared source columns | **22** |
-| Standardisable records | **110** |
-| Held for review | **59** |
-| Quarantined | **11** |
-| Distinct exception records | **70** |
-| Exception reason events | **74** |
-| Cross-source record joins | **0** |
+## Processing pipeline
 
-These are **historical observed figures**, not guaranteed behaviour across arbitrary future data.
-
-A separate, once-frozen **fictional challenge** contained nine truly equivalent source fields. The original conservative system auto-accepted only **3/9 (33.33% recall)**. The three auto-accepted cases were correct in this small sample (3/3), which does **not** demonstrate broad real-world precision. The synthetic answer keys were subsequently disclosed and are not a fresh hidden benchmark. The runtime `evaluation.json` is an **unscored placeholder**, not a measured validation report.
-
-## Architecture and repository layout
-
-| Path | Role |
-|---|---|
-| [`src/schemabridge/`](src/schemabridge/) | Ingestion, candidate ranking, profile, independent validation and reconciliation logic |
-| [`gui/`](gui/) | Streamlit router, four presentation pages, session state and guarded backend adapter |
-| [`config/`](config/) | Approved schema, source metadata and standardisation rules |
-| [`data/synthetic/`](data/synthetic/) | Three fictional CSV source exports |
-| [`design/brand/`](design/brand/) | Original SVG product mark |
-| [`tests/`](tests/) and [`gui/tests/`](gui/tests/) | Selected regression examples; not a complete copy of all historical test suites |
-
-The code is deliberately separated into proposals, deterministic validation, row reconciliation and presentation. No matching score is represented as a calibrated probability.
-
-## Running the local demonstration
-
-This showcase is based on an application previously exercised on **Windows 11, Python 3.12 and Streamlit 1.66.1**, with an existing local MiniLM model cache.
-
-From a prepared repository-root PowerShell environment:
-
-```powershell
-.\.venv-gui\Scripts\python.exe -m streamlit run gui/streamlit_app.py
+```mermaid
+flowchart TD
+    A[Three synthetic incident CSVs] --> B[Ingestion and field profiling]
+    B --> C[RapidFuzz + MiniLM candidate ranking]
+    C --> D{Independent compatibility validation}
+    D -->|ACCEPT| E[Record standardisation]
+    D -->|REVIEW| F[Hold for review]
+    D -->|REJECT| G[Reject field mapping]
+    E --> H[Accepted and exception record accounting]
+    F --> H
+    G --> H
+    H --> I[Read-only results]
+    I --> J[Explicit audited export]
 ```
 
-The checked-in [local Streamlit config](.streamlit/config.toml) binds the interface to `127.0.0.1:8501`. Start on Data Sources, then click **Run matching (offline)**, **Explain validation decisions**, and **Run reconciliation (read-only)** in order. For a no-write portfolio walkthrough, do **not** press **Prepare audited reports**.
+Four canonical business fields are supported: `incident_id`, `region`, `incident_status` and `resolution_minutes`. The two source-provenance fields are generated during processing rather than matched by the model.
 
-Dependency declarations are [core](requirements-core.txt), [semantic](requirements-semantic.txt) and [UI](requirements-ui.txt). The [observed Windows top-level versions](requirements-windows312-observed.txt) are historical evidence, **not a complete transitive lockfile**. The embedding model `sentence-transformers/all-MiniLM-L6-v2` must be present in a compatible local cache before offline matching. This curated public package has **not yet been freshly installed, tested or verified on an independent computer**. Do not assume that cloning alone establishes reproducibility.
+The system separates candidate ranking, deterministic compatibility checks, row reconciliation and presentation. For the implementation details, see [Architecture](docs/ARCHITECTURE.md).
 
-## Portfolio completion and scope
+## Results
 
-The owner signed off **44/44 milestones under a revised local, fictional-data-only portfolio acceptance contract** on 1 November 2026. This is a **qualified scope completion**, not a claim that every original stricter security/accessibility test passed or that the software is production certified. Native pointer-selected dataframe copying and the historical sidebar screen-reader warning sequence remain technically unverified. Browser icon requests, incomplete immutable model/dependency pinning and independent-machine reproduction are disclosed limitations.
+A recorded run with the included synthetic incident datasets produced:
 
-The original private development repository remains private. This curated public showcase contains only selected reviewed application, configuration, synthetic test and presentation files, not its full internal history or spent evaluation answer keys.
+| Measure | Result |
+|---|---:|
+| Input files | 3 |
+| Input records | 180 |
+| Declared source columns | 22 |
+| Standardised records | **110** |
+| Held for review | 59 |
+| Quarantined | 11 |
+| Distinct exception records | 70 |
+| Recorded exception reasons | 74 |
 
-## Testing and limitations
+Of the 110 standardised records, 35 included an accepted resolution duration and 75 had an allowed optional null duration. All 180 input records were accounted for.
 
-The original private development branch previously passed **128 core tests and 179 GUI tests** on the owner's Windows setup, followed by **22/22 focused redesigned-UI tests**, and a read-only four-page installed-Chrome run using the cached real MiniLM. Those results describe the **original private development checkout**, not a newly executed test run or CI result for this curated public repository. Selected test files appear in this showcase only as inspectable examples; they require their own execution before making public-checkout PASS claims.
+A separate labelled synthetic challenge assessed schema-matching behaviour. RapidFuzz ranked the correct field first in 4 of 9 equivalent cases; MiniLM did so in 6 of 9. The conservative validator automatically accepted 3 of the 9 equivalents, and all three accepted mappings were correct in that small challenge. This shows the trade-off between automatic coverage and strict validation. It is not a measurement of performance on real operational data.
 
-The browser acceptance review left native pointer-selected dataframe copying and an exact historical sidebar assistive-technology warning sequence **partially verified**. Zoom, focus, responsive layout and several keyboard interactions had substantial observed evidence, but that is **not WCAG certification**. Browser tests also observed blocked remote Material icon-font requests. The Streamlit `disableDataExport` option is a UI control and does **not guarantee that visible data is impossible to copy**.
+The detailed evaluation method and test evidence are in [Testing and evaluation](docs/TESTING.md).
 
-The application intentionally excludes real customer-data uploads, external accounts, multi-tenant hosting, model scores treated as probabilities, blind acceptance of unknown fields and general-purpose production security claims. It demonstrates conservative decisions and auditable software engineering on bounded fictional inputs.
+## Run locally
 
-**This is a software-engineering portfolio project, not a certified production platform.** Its usefulness lies in illustrating an explainable AI/data pipeline with controlled correctness boundaries, clear errors and testable components.
+The application was developed and exercised on Windows 11 with Python 3.12 and Streamlit 1.66.1. The steps below describe the intended local setup. A clean installation of this public repository on a separate machine has not been independently verified.
+
+**1. Clone the repository and create a virtual environment**
+
+```powershell
+git clone https://github.com/Sonkhe-Shongwe/SchemaBridge.git
+cd SchemaBridge
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+**2. Install the Python dependencies**
+
+```powershell
+python -m pip install -r requirements-semantic.txt -r requirements-ui.txt
+```
+
+**3. Cache the embedding model once while online**
+
+```powershell
+python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2', device='cpu')"
+```
+
+SchemaBridge loads the cached model on the local CPU when matching is requested. The ranking step expects that model to be available locally; it does not silently switch to a hosted inference service.
+
+**4. Start the application**
+
+```powershell
+python -m streamlit run gui/streamlit_app.py
+```
+
+Open **http://127.0.0.1:8501**. From the interface, run the stages in order: **Run matching (offline)**, **Explain validation decisions**, then **Run reconciliation (read-only)**.
+
+The final **Prepare audited reports (write once)** action is optional. It creates new files under the Git-ignored `output/gui_runs/` directory. You can inspect the complete workflow without writing reports.
+
+## Outputs
+
+When an audited export is prepared, SchemaBridge generates:
+
+| File | Contents |
+|---|---|
+| `standardised.csv` | Records that passed the mapping and row-level checks |
+| `rejected_rows.csv` | Held and quarantined records, with reason codes |
+| `mapping_report.json` | Source-level mappings, decisions, row counts and provenance |
+| `evaluation.json` | An explicitly unscored evaluation placeholder |
+
+The separate synthetic challenge results are documented in [Testing and evaluation](docs/TESTING.md); they are not inserted into the runtime `evaluation.json`.
+
+## Repository layout
+
+```text
+SchemaBridge/
+├── src/schemabridge/     Matching, validation, ingestion and reconciliation
+├── gui/                  Streamlit application, pages and session/export handling
+├── config/               Canonical schema, source metadata and value rules
+├── data/synthetic/       Three generated fictional incident exports
+├── tests/                Core regression tests
+├── gui/tests/            Interface and adapter regression tests
+├── assets/screenshots/   Application screenshots
+├── design/brand/         Logo and wordmark assets
+└── docs/                 Architecture and testing documentation
+```
+
+## Tests
+
+The repository includes core and Streamlit regression tests covering candidate ranking, compatibility decisions, record accounting, output checks and interface state. To run the included tests from the repository root:
+
+```powershell
+python -m pytest tests gui/tests -q
+```
+
+In the original Windows development checkout, the broader test suite recorded 128 passing core tests and 179 passing GUI tests. The redesigned interface also passed 22 focused GUI tests and was exercised in Chrome with the locally cached MiniLM model. Those historical results are distinct from a fresh test run of this public checkout, which contains a selected set of tests.
+
+See [Testing and evaluation](docs/TESTING.md) for coverage, observed results and outstanding verification work.
+
+## Scope
+
+SchemaBridge currently uses a fixed canonical schema and the three included fictional CSVs. Adding arbitrary source uploads would require extending the metadata contract, validation rules and associated tests. The published setup also depends on a separately cached MiniLM model; it does not include a bundled model or a fully pinned transitive dependency environment.
+
+The principal design decision is deliberate: **matching identifies possibilities; validated business rules determine what can be standardised.**
