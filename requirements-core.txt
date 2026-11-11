@@ -1,4 +1,4 @@
-# Phase 0 / MVP core. Version ranges are candidates until Windows 3.12 verification.
+# Data processing, lexical matching and regression testing.
 pandas>=2.2,<3
 rapidfuzz>=3.10,<4
 pytest>=8,<10
