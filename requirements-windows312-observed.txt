@@ -1,10 +1,7 @@
-# Phase 6 WINDOWS PYTHON 3.12 OBSERVED TOP-LEVEL VERSION SNAPSHOT
-# Exact package versions observed in the user's 27 Oct 2026 PowerShell logs.
-# This is NOT a tested complete dependency lock and no new clean install is claimed.
-# Tested existing-venv versions can still resolve different transitive wheels later.
-# Original flexible MVP constraints remain in requirements-core/semantic.txt.
-# Target: Windows AMD64, CPython 3.12.3, CPU MiniLM.
-# See docs/24-PHASE6-REPRODUCIBILITY.md for safe fresh-venv verification.
+# Reference package versions recorded on Windows 11 / CPython 3.12.3.
+# Environment snapshot only: transitive dependencies and model weights are not locked.
+# Installation requirements are defined in requirements-core.txt,
+# requirements-semantic.txt and requirements-ui.txt.
 pandas==2.3.3
 rapidfuzz==3.14.6
 pytest==9.1.1
