@@ -1,8 +1,7 @@
-"""UX2-04 presentation-only shared shell, truthful session-state labels.
+"""Shared Streamlit shell and session-stage presentation.
 
-No Streamlit dependency in state derivation. No model, validator, reconciliation,
-writer, network, or output-file access. Presence of a report is never treated
-as independent proof of ACCEPT, audit integrity, or final stage completion.
+Stage labels reflect available session artifacts without running analysis,
+changing data or treating a saved result as independently verified.
 """
 from __future__ import annotations
 
