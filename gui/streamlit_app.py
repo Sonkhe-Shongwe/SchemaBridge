@@ -1,10 +1,9 @@
-"""SchemaBridge UX2 light shared shell and protected four-stage router.
+"""Streamlit entry point for the four-stage SchemaBridge workbench.
 
-The Sources page reads approved fictional data via the tested adapter.
-AI Mapping performs candidate-only ranking only after an explicit Run click.
-Validation exposes independent decisions; Results permits separately gated reconciliation and audited export.
-No model loads or report writes occur in this entrypoint.
-Run from repository root with python -m streamlit run gui/streamlit_app.py.
+Routes source inspection, matching, validation, and reconciliation/export
+through separate pages. Analysis and file writes require explicit actions.
+Start from the repository root with:
+    python -m streamlit run gui/streamlit_app.py
 """
 
 from pathlib import Path
