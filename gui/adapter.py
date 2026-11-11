@@ -1,7 +1,7 @@
-"""Pure, safety-gated Python facade for the planned SchemaBridge GUI.
+"""Backend adapter for the SchemaBridge Streamlit workbench.
 
-No Streamlit imports, implicit inference, gold-label access, manual approval
-or duplicated business rules. P-031 reuses the original guarded output writer.
+Provides source inspection, candidate ranking, independent validation,
+reconciliation and guarded audited export without duplicating core rules.
 """
 
 from __future__ import annotations
