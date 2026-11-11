@@ -1,6 +1,2 @@
-# Streamlit GUI dependency for the local synthetic-only demo.
-# streamlit==1.66.1 was exercised on the owner's Windows 11 / Python 3.12
-# through the P033 real Chrome offline integration and four-file download gates.
-# This is observed runtime evidence, not a cold-cache multi-machine installation lock.
-# For the live verification and limits see CURRENT_STATE.md and tracking/RUNS.md.
+# Streamlit interface (version used in the Windows development environment).
 streamlit==1.66.1
