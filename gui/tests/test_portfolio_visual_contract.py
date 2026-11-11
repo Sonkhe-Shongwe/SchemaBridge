@@ -1,7 +1,7 @@
-"""Presentation-only checks for the unapproved SchemaBridge UI refresh.
+"""Regression checks for the SchemaBridge interface configuration.
 
-These source checks do not establish a real-browser, native-control or
-accessibility certification. They should be run only after private UI edits.
+These source-level checks cover visual tokens and selected UI constraints.
+Browser behaviour and assistive-technology support need separate testing.
 """
 from __future__ import annotations
 
