@@ -1,3 +1,4 @@
-# Install separately; can pull large PyTorch CPU dependencies.
+# Semantic field matching with Sentence Transformers.
+# Includes the core dependencies; PyTorch installation may be substantial.
 -r requirements-core.txt
 sentence-transformers>=3,<6
