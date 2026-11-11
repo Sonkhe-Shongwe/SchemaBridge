@@ -1,6 +1,5 @@
-# Local-only, synthetic-demo GUI foundation.
-# Launch from the repository root for this config to be discovered.
-# No secrets, uploads, or network model inference are configured here.
+# SchemaBridge local workbench settings.
+# Run Streamlit from the repository root to load this configuration.
 [server]
 address = "127.0.0.1"
 port = 8501
@@ -9,16 +8,11 @@ headless = false
 [browser]
 gatherUsageStats = false
 
-# Prevent Streamlit's automatic per-table CSV download and copy.
-# Explicit P031 audited output buttons are a separate, guarded action.
+# Use the application's audited export flow instead of Streamlit's table toolbar.
 [client]
 disableDataExport = true
 
-# UX2-04 original light theme, now with private visual-refinement candidate.
-# These changes require owner Chrome review before any re-verified UI claim.
-# The original seven keys were independently exercised in
-# the owner Windows UX2-02 synthetic probe on Streamlit 1.66.1 (docs/64).
-# Keep server loopback and client.disableDataExport unchanged above.
+# Light workspace theme and navy navigation.
 [theme]
 base = "light"
 primaryColor = "#2059CB"
